@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>WebSocket Test Client</title>
+    <!-- Bootstrap core CSS -->
+    <link href="./assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="./assets/style.css" rel="stylesheet">
+
+    <script src="./assets/wsLogic.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"></script>
+</head>
+
+<body onload="loadHistory()">
+
+<div id="content">
+    <!-- style="height: 76vh; overflow-y: auto; overflow-x: hidden; text-align: left;" -->
+
+    <div class="Middle">
+
+        <div class="header">
+            <h4 class="text-muted">WebSocket Test Client</h4>
+        </div>
+
+        <div>
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label for="serverSelected" class="col-sm-1 control-label" style="text-align: left">URL:</label>
+
+                    <div class="col-sm-7">
+                        <input type="text" id="serverSelected" class="form-control" value="//echo">
+                    </div>
+                    <div class="col-sm-1">
+                        <button type="button" class="btn btn-sm btn-primary" onclick="connectToServer()">
+                            Connect
+                        </button>
+                    </div>
+                    <div class="col-sm-1">
+                        <button type="button" class="btn btn-sm btn-danger" onclick="disconnectFromServer()">
+                            Disconnect
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+        <div class="input-group">
+            Connection Status:
+            <span id="connectionStatus">
+            Disconnected
+            </span>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" id="connection_error_icon"></span>
+<!--             <select id="contentType"> -->
+<!--                 <option value="text">Plain Text</option> -->
+<!--                 <option value="markdown">Markdown</option> -->
+<!--             </select> -->
+        </div>
+        <!-- /.row -->
+
+    <textarea class="input" onkeydown="submitOnEnter()" id="msgToServer" placeholder="Put your Message Here"></textarea>
+        <br>
+        <button type="button" class="btn btn-sm btn-success" onclick="sendMessage()">
+            Send Message
+        </button>
+
+    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" id="error_icon" style="color:#c9302c; visibility: hidden"></span>
+
+        <button type="button" class="btn btn-sm btn-success" onclick="clearLog()">
+            Clear Log
+        </button>
+
+        <button type="button" class="btn btn-sm btn-success" onclick="clearHistory()">
+            Clear History
+        </button>
+
+        <br><br>
+        <h4 class="text-muted">Response Log</h4>
+
+        <div id="logContainer">
+            <ul class="list-group" id="responseFromServer">
+            </ul>
+        </div>
+    </div>
+
+    <div class="Right">
+        <div class="header">
+            <h4 class="text-muted">Input History</h4>
+        </div>
+        <div>
+            <ul class="list-group" id="historyContainer">
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    var serverSelected = document.getElementById("serverSelected").value;
+    if(serverSelected.startsWith("//")) {
+        serverSelected = serverSelected.replace("//", "ws://"+location.host+"/");
+        if (location.protocol === 'https:') {
+            serverSelected = serverSelected.replace("ws://", "wss://");
+        }
+        document.getElementById("serverSelected").value = serverSelected;
+    }
+    document.getElementById("msgToServer").addEventListener("keypress", submitOnEnter);
+    connectToServer();
+</script>
+
+</body></html>

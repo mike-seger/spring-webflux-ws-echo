@@ -1,0 +1,4 @@
+server.port: 8884
+
+logging.level:
+  org.springframework: info
